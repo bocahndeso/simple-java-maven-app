@@ -14,7 +14,6 @@ node {
                 }
             }
             finally {
-                junit allowEmptyResults: true
                 junit 'target/surefire-reports/*.xml'
             }
         }
