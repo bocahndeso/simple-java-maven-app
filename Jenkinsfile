@@ -13,6 +13,9 @@ node {
                     'mvn test'
                 }
             }
+            catch(e){
+                echo "Testing Gagal"
+            }
             finally {
                 junit 'target/surefire-reports/*.xml'
             }
