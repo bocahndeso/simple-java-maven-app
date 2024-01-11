@@ -17,7 +17,7 @@ node {
                 echo "Testing Gagal"
             }
             finally {
-                junit 'target/surefire-reports/*.xml'
+                junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml' 
             }
         }
 
