@@ -1,13 +1,17 @@
 node {
     /* Requires the Docker Pipeline plugin to be installed */
-    docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
+    checkout scm
         stage('Build') {
-           sh 'mvn -B -DskipTests clean package'
+            docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
+                sh 'mvn -B -DskipTests clean package'
+            }
         }
 
         stage('Test') {
             try {
-                'mvn test'
+                docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
+                    'mvn test'
+                }
             }
             finally {
                 junit 'target/surefire-reports/*.xml'
@@ -15,8 +19,8 @@ node {
         }
 
         stage('Deliver') {
-           sh './jenkins/scripts/deliver.sh'
+            docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
+                sh './jenkins/scripts/deliver.sh'
+            }
         }
-
-    }
 }
