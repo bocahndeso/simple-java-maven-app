@@ -21,9 +21,9 @@ node {
             }
         }
 
-        stage('Deliver') {
+        stage('Deploy') {
             docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
-                archiveArtifacts 'target/my-app-1.0-SNAPSHOT.jar'
+                archiveArtifacts '**/target/my-app-1.0-SNAPSHOT.jar'
 	            docker.build("my-app:latest");
 	            sh 'docker run --rm my-app'
 	            sleep 60
