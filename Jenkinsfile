@@ -26,7 +26,7 @@ node {
                 echo 'Contents of the workspace:'
                 sh 'ls -R'
                 try {
-                    archiveArtifacts 'target/ProjectAkhir.jar'
+                    archiveArtifacts 'target/my-app-1.0-SNAPSHOT.jar'
                     docker.build("my-app:latest")
                     sh 'docker run --rm my-app'
                     sleep 60
