@@ -23,6 +23,8 @@ node {
 
         stage('Deploy') {
             docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
+                echo 'Contents of the workspace:'
+                sh 'ls -R'
                 try {
                     archiveArtifacts 'target/ProjectAkhir.jar'
                     docker.build("my-app:latest")
