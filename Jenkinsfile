@@ -23,10 +23,15 @@ node {
 
         stage('Deploy') {
             docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
-                archiveArtifacts '**/target/ProjectAkhir.jar'
-	            docker.build("my-app:latest");
-	            sh 'docker run --rm my-app'
-	            sleep 60
+                try {
+                    archiveArtifacts '**/target/ProjectAkhir.jar'
+                    docker.build("my-app:latest")
+                    sh 'docker run --rm my-app'
+                    sleep 60
+                } catch (Exception deployError) {
+                    echo "Deployment failed: ${deployError.message}"
+                    currentBuild.result = 'FAILURE'
+                }
             }
         }
 }
