@@ -27,7 +27,7 @@ node {
                 sh 'ls -R'
                 try {
                     archiveArtifacts 'target/my-app-1.0-SNAPSHOT.jar'
-                    docker.build("my-app:latest")
+                    docker.build("my-app:latest", "-f Dockerfile .")
                     sh 'docker run --rm my-app'
                     sleep 60
                 } catch (Exception deployError) {
