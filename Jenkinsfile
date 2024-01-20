@@ -1,40 +1,30 @@
 node {
-    /* Requires the Docker Pipeline plugin to be installed */
     checkout scm
-        stage('Build') {
-            docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
-                sh 'mvn -B -DskipTests clean package'
-            }
+    stage('Build') {
+    	docker.image('maven:3.8.6-eclipse-temurin-18-alpine').inside('-v /root/.m2:/root/.m2') {
+		sh 'mvn -B -DskipTests clean package'
+	}
+    }
+    stage('Test') {
+    	try {
+	        docker.image('maven:3.8.6-eclipse-temurin-18-alpine').inside('-v /root/.m2:/root/.m2') {
+			sh 'mvn test'
+		}
+        } catch (e) {
+                echo "Test Stage Failed!"
+        } finally {
+                junit 'target/surefire-reports/*.xml'
         }
-
-        stage('Test') {
-            try {
-                docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
-                    'mvn test'
-                }
-            }
-            catch(e){
-                echo "Testing Gagal"
-            }
-            finally {
-                junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml' 
-            }
-        }
-
-        stage('Deploy') {
-            docker.image('maven:3.9.0').inside('-v /root/.m2:/root/.m2') {
-                echo 'Contents of the workspace:'
-                sh 'ls -R'
-                try {
-                    archiveArtifacts 'target/my-app-1.0-SNAPSHOT.jar'
-                    //sh 'sudo docker --version'
-                    docker.build("my-app:latest", "-f Dockerfile .")
-                    //sh 'docker run --rm my-app'
-                    sleep 60
-                } catch (Exception deployError) {
-                    echo "Deployment failed: ${deployError.message}"
-                    currentBuild.result = 'FAILURE'
-                }
-            }
-        }
+    }
+    stage('Manual Approval'){
+	    input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
+    }
+    stage('Deploy') {
+	    archiveArtifacts 'target/my-app-1.0-SNAPSHOT.jar'
+	    docker.build("my-app:latest");
+	   // sh "ssh-keyscan -H 54.169.218.67 >> ~/.ssh/known_hosts"
+	   // sh "/usr/bin/scp -i /var/jenkins_home/notes-implementasi-cicd.pem /var/jenkins_home/workspace/submission-cicd-pipeline-iputuhariyadi/target/my-app-1.0-SNAPSHOT.jar  ubuntu@54.169.218.67:/home/ubuntu/my-app-1.0-SNAPSHOT.jar"
+	    sh 'docker run --rm my-app'
+	    sleep 60
+    }
 }
