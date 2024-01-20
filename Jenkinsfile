@@ -27,9 +27,9 @@ node {
                 sh 'ls -R'
                 try {
                     archiveArtifacts 'target/my-app-1.0-SNAPSHOT.jar'
-                    sh 'docker --version'
+                    //sh 'sudo docker --version'
                     docker.build("my-app:latest", "-f Dockerfile .")
-                    sh 'docker run --rm my-app'
+                    //sh 'docker run --rm my-app'
                     sleep 60
                 } catch (Exception deployError) {
                     echo "Deployment failed: ${deployError.message}"
