@@ -11,7 +11,7 @@ node {
 			sh 'mvn test'
 		}
         } catch (e) {
-                echo "Test Stage Failed!"
+                echo "Tahapan Test Gagal!"
         } finally {
                 junit 'target/surefire-reports/*.xml'
         }
@@ -20,7 +20,7 @@ node {
 	    input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
     }
     stage('Deploy') {
-	    archiveArtifacts 'target/my-app-1.0-SNAPSHOT.jar'
+	    archiveArtifacts 'target/ProjectAkhir.jar'
 	    docker.build("my-app:latest");
 	   // sh "ssh-keyscan -H 54.169.218.67 >> ~/.ssh/known_hosts"
 	   // sh "/usr/bin/scp -i /var/jenkins_home/notes-implementasi-cicd.pem /var/jenkins_home/workspace/submission-cicd-pipeline-iputuhariyadi/target/my-app-1.0-SNAPSHOT.jar  ubuntu@54.169.218.67:/home/ubuntu/my-app-1.0-SNAPSHOT.jar"
