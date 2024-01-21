@@ -24,7 +24,7 @@ node {
 	    docker.build("my-app:latest");
         sh "mkdir -p /var/jenkins_home/.ssh/"
 	    sh "ssh-keyscan -H 47.128.15.241 >> ~/.ssh/known_hosts"
-	    sh "/usr/bin/scp -i /var/jenkins_home/Latihan-EC2.pem /var/jenkins_home/workspace/submission-cicd-pipeline-bocahndeso/target/ProjectAkhir.jar  ubuntu@47.128.15.241:/home/ubuntu/mProjectAkhir.jar"
+	    sh "/usr/bin/scp -i /var/jenkins_home/latihan-EC2.pem /var/jenkins_home/workspace/submission-cicd-pipeline-bocahndeso/target/ProjectAkhir.jar  ubuntu@47.128.15.241:/home/ubuntu/mProjectAkhir.jar"
 	    sh 'docker run --rm my-app'
 	    sleep 60
     }
