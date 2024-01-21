@@ -5,7 +5,7 @@ package com.mycompany.app;
  */
 public class App {
 
-    private static final String MESSAGE = "Hello World!";
+    private static final String MESSAGE = "Alhamdulillah bisa selesai juga akhirnya, file disimpang dengan nama ProjectAkhir.jar";
 
     public App() {}
 
